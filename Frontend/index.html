@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="stylesheet.css">
+  <title>DB Project 1</title>
+</head>
+<body>
+  <main>
+      <h2>User Registration</h2>
+      <label>Username:</label>
+      <input type="text" id="reg-username"><br>
+      <label>Password:</label>
+      <input type="password" id="reg-password"><br>
+      <label>First Name:</label>
+      <input type="text" id="reg-firstname"><br>
+      <label>Last Name:</label>
+      <input type="text" id="reg-lastname"><br>
+      <label>Salary:</label>
+      <input type="number" id="reg-salary"><br>
+      <label>Age:</label>
+      <input type="number" id="reg-age"><br>
+      <button id="register-btn">Register</button>
+      <p id="register-message"></p>
+
+      <br><br>
+      <h2>User Sign-In</h2>
+      <label>Username:</label>
+      <input type="text" id="signin-username"><br>
+      <label>Password:</label>
+      <input type="password" id="signin-password"><br>
+      <button id="signin-btn">Sign In</button>
+      <p id="signin-message"></p>
+
+      <br><br><hr><br>
+      <h2>User Searches</h2>
+
+      <h3>1. Search by first and/or last name</h3>
+      <input type="text" id="search-firstname" placeholder="First name">
+      <input type="text" id="search-lastname" placeholder="Last name">
+      <button id="search-name-btn">Search by Name</button>
+
+      <h3>2. Search by userid</h3>
+      <input type="text" id="search-userid" placeholder="Username">
+      <button id="search-userid-btn">Search by Userid</button>
+
+      <h3>3. Search by salary between X and Y</h3>
+      <input type="number" id="salary-min" placeholder="Min salary">
+      <input type="number" id="salary-max" placeholder="Max salary">
+      <button id="search-salary-btn">Search by Salary</button>
+
+      <h3>4. Search by age between X and Y</h3>
+      <input type="number" id="age-min" placeholder="Min age">
+      <input type="number" id="age-max" placeholder="Max age">
+      <button id="search-age-btn">Search by Age</button>
+
+      <h3>5. Registered after a userid (e.g. john)</h3>
+      <input type="text" id="after-userid" placeholder="userid" value="john">
+      <button id="search-after-btn">Search After</button>
+
+      <h3>6. Never signed in</h3>
+      <button id="search-never-btn">Search Never Signed In</button>
+
+      <h3>7. Registered same day as a userid (e.g. john)</h3>
+      <input type="text" id="sameday-userid" placeholder="userid" value="john">
+      <button id="search-sameday-btn">Search Same Day</button>
+
+      <h3>8. Registered today</h3>
+      <button id="search-today-btn">Search Registered Today</button>
+
+      <br><br>
+      <table id="users-table">
+         <thead>
+             <th>Username</th>
+             <th>First Name</th>
+             <th>Last Name</th>
+             <th>Salary</th>
+             <th>Age</th>
+             <th>Register Day</th>
+             <th>Sign-In Time</th>
+         </thead>
+         <tbody></tbody>
+      </table>
+
+      <br><br><hr><br>
+      <h2>Sample: Names Table</h2>
+      <label>Name:</label>
+      <input type="text" id="name-input">
+      <button id="add-name-btn">Add Name</button>
+ 
+     <br><br><br>
+     <div> 
+        <input placeholder="search by name" id="search-input">
+        <button id="search-btn">Search</button>
+     </div>
+
+
+     <table id="table">
+         <thead>
+             <th>Id</th>
+             <th>Name</th>
+             <th>Date Added</th>
+             <th>Delete</th>
+             <th>Edit</th>  
+         </thead>
+         <tbody></tbody>
+     </table>
+
+     <section hidden id="update-row">
+         <label>Name:</label>
+         <input type="text" id="update-name-input">
+         <button id="update-row-btn" value="">Update</button>
+    </section>
+</main>
+<script src="index.js"></script>
+</body>
+</html>
