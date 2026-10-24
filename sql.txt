@@ -1,0 +1,31 @@
+-- Users table
+CREATE TABLE Users (
+    username VARCHAR(50) PRIMARY KEY,
+    password VARCHAR(255),
+    firstname VARCHAR(50),
+    lastname VARCHAR(50),
+    salary FLOAT,
+    age INTEGER,
+    registerday DATE,
+    signintime DATETIME
+);
+
+-- Register (parameterized — prevents SQL injection)
+INSERT INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime)
+VALUES (?, ?, ?, ?, ?, ?, ?, NULL);
+
+-- Sign in (parameterized — prevents SQL injection)
+SELECT * FROM Users WHERE username = ? AND password = ?;
+
+-- Update sign-in time
+UPDATE Users SET signintime = ? WHERE username = ?;
+
+-- Teammate: add search SQL below
+-- Search by first and/or last name
+-- Search by userid
+-- Search by salary between X and Y
+-- Search by age between X and Y
+-- Registered after a userid (e.g. john)
+-- Never signed in
+-- Registered same day as a userid (e.g. john)
+-- Registered today
