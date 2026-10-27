@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const dotenv = require('dotenv');
+const bcrypt = require('bcrypt');
 dotenv.config();
 
 let instance = null;
@@ -29,10 +30,10 @@ class DbService{
   async registerUser(username, password, firstname, lastname, salary, age){
       try{
            const registerday = new Date();
-           // ? placeholders prevent SQL injection
+           const hashedPassword = await bcrypt.hash(password, 10);
            await new Promise((resolve, reject) => {
                const query = "INSERT INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime) VALUES (?, ?, ?, ?, ?, ?, ?, NULL);";
-               connection.query(query, [username, password, firstname, lastname, salary, age, registerday], (err, result) => {
+                connection.query(query, [username, hashedPassword, firstname, lastname, salary, age, registerday], (err, result) => {
                    if(err) reject(new Error(err.message));
                    else resolve(result);
                });
@@ -51,44 +52,70 @@ class DbService{
       }
   }
 
-  async signInUser(username, password){
-      try{
-           // ? placeholders prevent SQL injection
-           const users = await new Promise((resolve, reject) => {
-               const query = "SELECT * FROM Users WHERE username = ? AND password = ?;";
-               connection.query(query, [username, password], (err, results) => {
-                   if(err) reject(new Error(err.message));
-                   else resolve(results);
-               });
-           });
+async signInUser(username, password) {
+    try {
+        // Find the user by username
+        const users = await new Promise((resolve, reject) => {
+            const query = "SELECT * FROM Users WHERE username = ?;";
 
-           if(!users || users.length === 0){
-               return { success: false, message: "Invalid username or password" };
-           }
+            connection.query(query, [username], (err, results) => {
+                if (err) reject(new Error(err.message));
+                else resolve(results);
+            });
+        });
 
-           const signintime = new Date();
-           await new Promise((resolve, reject) => {
-               const query = "UPDATE Users SET signintime = ? WHERE username = ?;";
-               connection.query(query, [signintime, username], (err, result) => {
-                   if(err) reject(new Error(err.message));
-                   else resolve(result);
-               });
-           });
+        // Check whether the user exists
+        if (!users || users.length === 0) {
+            return {
+                success: false,
+                message: "Invalid username or password"
+            };
+        }
 
-           return {
-                success: true,
-                user: {
-                     username: users[0].username,
-                     firstname: users[0].firstname,
-                     lastname: users[0].lastname,
-                     signintime: signintime
-                }
-           };
-      } catch(error){
-           console.log(error);
-           return { success: false, message: error.message };
-      }
-  }
+        // Compare entered password with stored bcrypt hash
+        const passwordMatches = await bcrypt.compare(
+            password,
+            users[0].password
+        );
+
+        if (!passwordMatches) {
+            return {
+                success: false,
+                message: "Invalid username or password"
+            };
+        }
+
+        // Update the user's sign-in timestamp
+        const signintime = new Date();
+
+        await new Promise((resolve, reject) => {
+            const query = "UPDATE Users SET signintime = ? WHERE username = ?;";
+
+            connection.query(query, [signintime, username], (err, result) => {
+                if (err) reject(new Error(err.message));
+                else resolve(result);
+            });
+        });
+
+        return {
+            success: true,
+            user: {
+                username: users[0].username,
+                firstname: users[0].firstname,
+                lastname: users[0].lastname,
+                signintime: signintime
+            }
+        };
+
+    } catch (error) {
+        console.log(error);
+
+        return {
+            success: false,
+            message: "Sign-in failed"
+        };
+    }
+}
 
   // --- Justin Tran: add search methods below ---
 
