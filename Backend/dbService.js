@@ -91,14 +91,227 @@ class DbService{
   }
 
   // --- Justin Tran: add search methods below ---
-  // searchUsersByName(firstname, lastname)
-  // searchUserById(username)
-  // searchUsersBySalary(minSalary, maxSalary)
-  // searchUsersByAge(minAge, maxAge)
-  // searchUsersRegisteredAfter(userid)
-  // searchUsersNeverSignedIn()
-  // searchUsersSameDayAs(userid)
-  // searchUsersRegisteredToday()
+
+
+  // Requirement 3: Search users by first and/or last name
+  async searchUsersByName(firstname, lastname) {
+    try {
+        let query = "SELECT username, firstname, lastname, salary, age, registerday, signintime FROM Users WHERE 1=1";
+        const params = [];
+
+        if (firstname) {
+            query += " AND firstname LIKE ?";
+            params.push(`%${firstname}%`);
+        }
+
+        if (lastname) {
+            query += " AND lastname LIKE ?";
+            params.push(`%${lastname}%`);
+        }
+
+        const results = await new Promise((resolve, reject) => {
+            connection.query(query, params, (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+
+        return results;
+
+    } catch (error) {
+        console.log(error);
+        return { error: error.message };
+    }
+}
+
+// Requirement 4: Search users by User ID
+async searchUserById(username) {
+    try {
+        const query = `
+            SELECT username, firstname, lastname, salary,
+                   age, registerday, signintime
+            FROM Users
+            WHERE username = ?
+        `;
+
+        const results = await new Promise((resolve, reject) => {
+            connection.query(query, [username], (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+
+        return results;
+
+    } catch (error) {
+        console.log(error);
+        return { error: error.message };
+    }
+}
+
+// Requirement 5: Search users by salary range
+async searchUsersBySalary(minSalary, maxSalary) {
+    try {
+        const query = `
+            SELECT username, firstname, lastname, salary,
+                   age, registerday, signintime
+            FROM Users
+            WHERE salary BETWEEN ? AND ?
+            ORDER BY salary ASC
+        `;
+
+        const results = await new Promise((resolve, reject) => {
+            connection.query(query, [minSalary, maxSalary], (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+
+        return results;
+
+    } catch (error) {
+        console.log(error);
+        return { error: error.message };
+    }
+}
+
+// Requirement 6: Search users by age range
+async searchUsersByAge(minAge, maxAge) {
+    try {
+        const query = `
+            SELECT username, firstname, lastname, salary,
+                   age, registerday, signintime
+            FROM Users
+            WHERE age BETWEEN ? AND ?
+            ORDER BY age ASC
+        `;
+
+        const results = await new Promise((resolve, reject) => {
+            connection.query(query, [minAge, maxAge], (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+
+        return results;
+
+    } catch (error) {
+        console.log(error);
+        return { error: error.message };
+    }
+}
+
+// Requirement 7: Search users registered after a specific user
+async searchUsersRegisteredAfter(userid) {
+    try {
+        const query = `
+            SELECT username, firstname, lastname, salary,
+                   age, registerday, signintime
+            FROM Users
+            WHERE registerday > (
+                SELECT registerday
+                FROM Users
+                WHERE username = ?
+            )
+            ORDER BY registerday ASC
+        `;
+
+        const results = await new Promise((resolve, reject) => {
+            connection.query(query, [userid], (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+
+        return results;
+
+    } catch (error) {
+        console.log(error);
+        return { error: error.message };
+    }
+}
+
+// Requirement 8: Search users who never signed in
+async searchUsersNeverSignedIn() {
+    try {
+        const query = `
+            SELECT username, firstname, lastname, salary,
+                   age, registerday, signintime
+            FROM Users
+            WHERE signintime IS NULL
+            ORDER BY username ASC
+        `;
+
+        const results = await new Promise((resolve, reject) => {
+            connection.query(query, (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+
+        return results;
+
+    } catch (error) {
+        console.log(error);
+        return { error: error.message };
+    }
+}
+
+// Requirement 9: Search users registered on the same day
+async searchUsersSameDayAs(userid) {
+    try {
+        const query = `
+            SELECT username, firstname, lastname, salary,
+                   age, registerday, signintime
+            FROM Users
+            WHERE registerday = (
+                SELECT registerday
+                FROM Users
+                WHERE username = ?
+            )
+            ORDER BY username ASC
+        `;
+
+        const results = await new Promise((resolve, reject) => {
+            connection.query(query, [userid], (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+
+        return results;
+
+    } catch (error) {
+        console.log(error);
+        return { error: error.message };
+    }
+}
+
+// Requirement 10: Search users registered today
+async searchUsersRegisteredToday() {
+    try {
+        const query = `
+            SELECT username, firstname, lastname, salary,
+                   age, registerday, signintime
+            FROM Users
+            WHERE registerday = CURDATE()
+            ORDER BY username ASC
+        `;
+
+        const results = await new Promise((resolve, reject) => {
+            connection.query(query, (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+
+        return results;
+
+    } catch (error) {
+        console.log(error);
+        return { error: error.message };
+    }
+}
 }
 
 module.exports = DbService;
