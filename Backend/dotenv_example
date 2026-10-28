@@ -1,3 +1,4 @@
+# Jordan Luong: example environment config - copy this file to .env
 PORT=5050
 DB_USER=root
 PASSWORD=

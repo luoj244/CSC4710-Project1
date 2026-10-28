@@ -1,3 +1,5 @@
+-- --- Jordan Luong: Users table, register and sign-in queries ---
+
 -- Users table
 CREATE TABLE Users (
     username VARCHAR(50) PRIMARY KEY,
@@ -15,7 +17,8 @@ INSERT INTO Users (username, password, firstname, lastname, salary, age, registe
 VALUES (?, ?, ?, ?, ?, ?, ?, NULL);
 
 -- Sign in (parameterized — prevents SQL injection)
-SELECT * FROM Users WHERE username = ? AND password = ?;
+-- Looks up the user by username; the password is then checked against the stored bcrypt hash in dbService.js
+SELECT * FROM Users WHERE username = ?;
 
 -- Update sign-in time
 UPDATE Users SET signintime = ? WHERE username = ?;
