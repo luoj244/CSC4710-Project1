@@ -1,3 +1,5 @@
+// --- Jordan Luong: frontend logic (registration, sign-in, and search UI) ---
+
 const registerBtn = document.querySelector('#register-btn');
 registerBtn.onclick = function (){
     const username = document.querySelector('#reg-username').value;

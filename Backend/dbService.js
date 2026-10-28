@@ -1,3 +1,4 @@
+// --- Jordan Luong: database connection setup ---
 const mysql = require('mysql');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
@@ -24,6 +25,8 @@ class DbService{
     static getDbServiceInstance(){
         return instance? instance: new DbService();
     }
+
+  // --- Jordan Luong: register and sign-in methods (bcrypt hashing added by Justin Tran) ---
 
   // Register and Sign-in
 

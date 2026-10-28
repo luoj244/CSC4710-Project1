@@ -1,3 +1,4 @@
+// --- Jordan Luong: Express server setup ---
 const express = require('express')
 const cors = require ('cors')
 const dotenv = require('dotenv')
@@ -9,6 +10,8 @@ const dbService = require('./dbService');
 app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({extended: false}));
+
+// --- Jordan Luong: register and sign-in routes ---
 
 // Register and Sign-in
 
